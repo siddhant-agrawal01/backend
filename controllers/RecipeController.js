@@ -18,9 +18,41 @@ const createRecipe = async (req, res) => {
   }
 };
 
+// edit a recipe
+const editRecipe = async (req, res) => {
+  const { id } = req.params;
+  const { title, ingredients, instructions, imageUrl } = req.body;
+
+  try {
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      id,
+      { title, ingredients, instructions, imageUrl },
+      { new: true }
+    );
+
+    res.status(200).json(updatedRecipe);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// delete a recipe
+const deleteRecipe = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Recipe.findByIdAndDelete(id);
+    res.status(200).json({ message: "Recipe deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getPublicRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find(); 
+    const recipes = await Recipe.find();
     res.json(recipes);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -37,7 +69,6 @@ const getAllRecipes = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 const searchRecipes = async (req, res) => {
   const searchKey = req.params.key;
@@ -62,5 +93,7 @@ module.exports = {
   getPublicRecipes,
   getAllRecipes,
   createRecipe,
+  editRecipe,
+  deleteRecipe,
   searchRecipes,
 };

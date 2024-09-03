@@ -6,6 +6,8 @@ const {
   getAllRecipes,
   createRecipe,
   searchRecipes,
+  deleteRecipe,
+  editRecipe,
 } = require("../controllers/RecipeController");
 
 router.get('/public', getPublicRecipes);
@@ -14,6 +16,8 @@ router.get('/public', getPublicRecipes);
 
 router.get('/',getAllRecipes);
 router.post("/recipe", createRecipe);
+router.delete("/recipe/:id", deleteRecipe);
+router.put("/recipe/:id", editRecipe);
 router.get("/recipe", verifyToken, getAllRecipes);
 router.get("/searchRecipes/:key", searchRecipes);
 
